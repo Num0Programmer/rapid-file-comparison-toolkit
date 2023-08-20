@@ -1,2 +1,3 @@
-# rapid-file-comparison-toolkit
-A library of functions used to compare files.
+# Rapid File Comparison Toolkit (RFCTk)
+A library of functionality used to compare files written in Rust.
+
