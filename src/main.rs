@@ -3,6 +3,9 @@ use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 
+#[macro_use]
+extern crate simple_log;
+
 // arg select
 const FILE_ONE_SEL: usize = 1;
 const FILE_TWO_SEL: usize = 2;
@@ -11,6 +14,7 @@ const FILE_TWO_SEL: usize = 2;
 fn main() -> std::io::Result<()>
 {
     let args: Vec<_> = env::args().collect();
+    simple_log::quick!();
 
     let file_1_str = &args[FILE_ONE_SEL];
     let file_2_str = &args[FILE_TWO_SEL];
@@ -29,7 +33,7 @@ fn main() -> std::io::Result<()>
     // check files have same length
     if total_lines != fs::metadata(&file_2_str)?.len()
     {
-        // log warning for file length mismatch
+        warn!("The provided file lengths are different!")
     }
 
     // create BufReaders for files
