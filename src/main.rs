@@ -31,16 +31,22 @@ fn main() -> std::io::Result<()>
     let mut processed_lines = 0;
 
     // create BufReaders for files
-    let file_1_buf = BufReader::new(file_1);
-    let file_2_buf = BufReader::new(file_2);
+    let mut file_1_buf = BufReader::new(file_1);
+    let mut file_2_buf = BufReader::new(file_2);
+    let mut str_1_buf = String::new();
+    let mut str_2_buf = String::new();
 
-    // read next lines until EOF of either or both files
+    // read another line from both buffers until EOF for either file
+    while file_1_buf.read_line(&mut str_1_buf)? > 0
+        && file_2_buf.read_line(&mut str_2_buf)? > 0
     {
         // check line bufs eq
+        if str_1_buf.eq(&str_2_buf)
         {
             lines_equal += 1;
         }
         // otherwise, assume lines are not equal
+        else
         {
             // log line number and text from file(s)
         }
