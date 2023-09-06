@@ -3,9 +3,6 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*;
 
-#[macro_use]
-extern crate simple_log;
-
 // arg select
 const FILE_ONE_SEL: usize = 1;
 const FILE_TWO_SEL: usize = 2;
@@ -14,12 +11,10 @@ const FILE_TWO_SEL: usize = 2;
 fn main() -> std::io::Result<()>
 {
     let args: Vec<_> = env::args().collect();
-    simple_log::quick!();
 
     let file_1_str = &args[FILE_ONE_SEL];
     let file_2_str = &args[FILE_TWO_SEL];
 
-    // TODO: impl custom errors
     // try to open first file
     let file_1 = File::open(&file_1_str)?;
 
@@ -49,18 +44,22 @@ fn main() -> std::io::Result<()>
         else
         {
             // log line number and text from file(s)
+            println!("Warning: The following lines do not match!");
+            println!("{}: {}: {}",
+                file_1_str, processed_lines + 1, str_1_buf.trim()
+            );
+            println!("{}: {}: {}\n",
+                file_2_str, processed_lines + 1, str_2_buf.trim()
+            );
         }
+
         processed_lines += 1;
-        
-        // clear buffers?
     }
 
     println!("{} lines processed", processed_lines);
-    println!(
-        "{} out of {} lines were equivalent.",
+    println!("{} out of {} lines were equivalent.",
         lines_equal, processed_lines
     );
 
     Ok(())
 }
-
