@@ -1,6 +1,6 @@
 use std::env;
-use std::fs;
 use std::fs::File;
+use std::io::BufReader;
 use std::io::prelude::*;
 
 #[macro_use]
@@ -26,17 +26,13 @@ fn main() -> std::io::Result<()>
     // try to open second file
     let file_2 = File::open(&file_2_str)?;
 
-    let total_lines = fs::metadata(&file_1_str)?.len(); // total lines in file one
+    // initialize comparison information
     let mut lines_equal = 0;
-    let mut processed_lines = 0;    
-
-    // check files have same length
-    if total_lines != fs::metadata(&file_2_str)?.len()
-    {
-        warn!("The provided file lengths are different!")
-    }
+    let mut processed_lines = 0;
 
     // create BufReaders for files
+    let file_1_buf = BufReader::new(file_1);
+    let file_2_buf = BufReader::new(file_2);
 
     // read next lines until EOF of either or both files
     {
@@ -53,8 +49,11 @@ fn main() -> std::io::Result<()>
         // clear buffers?
     }
 
-    // log number of lines processed
-    // log number of lines equal out of total lines in first file
+    println!("{} lines processed", processed_lines);
+    println!(
+        "{} out of {} lines were equivalent.",
+        lines_equal, processed_lines
+    );
 
     Ok(())
 }
