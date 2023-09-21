@@ -11,8 +11,8 @@ pub const ARG_TWO_SEL: usize = 2;
 /// structure to store statistics about the comparison
 pub struct ComparisonStats
 {
-    lines_equal: u32,
-    processed_lines: u32
+    pub lines_equal: u32,
+    pub processed_lines: u32
 }
 
 impl ComparisonStats
@@ -29,7 +29,11 @@ impl ComparisonStats
 
 
 /// compares contents of a directory to a single file
-pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
+pub fn dir_file_cmp(
+    stats: &mut ComparisonStats,
+    dir: &String,
+    cmp_file_str: &String
+) -> std::io::Result<()>
 {
     for entry in fs::read_dir(dir)?
     {
@@ -40,7 +44,7 @@ pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
             .unwrap();
 
         println!("Comparing {} to {}...", file_str, cmp_file_str);
-        file_cmp(&file_str, cmp_file_str)?;
+        file_cmp(stats, &file_str, cmp_file_str)?;
     }
 
     Ok(())
@@ -48,17 +52,17 @@ pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
 
 
 /// compares two files at given file paths
-pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
+pub fn file_cmp(
+    stats: &mut ComparisonStats,
+    file_str: &String,
+    cmp_file_str: &String
+) -> std::io::Result<()>
 {
     // try to open first file
     let file_1 = File::open(&file_str)?;
 
     // try to open second file
     let file_2 = File::open(&cmp_file_str)?;
-
-    // initialize comparison information
-    let mut lines_equal = 0;
-    let mut processed_lines = 0;
 
     // create BufReaders for files
     let mut file_1_buf = BufReader::new(file_1);
@@ -73,7 +77,7 @@ pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
         // check line bufs eq
         if str_1_buf.eq(&str_2_buf)
         {
-            lines_equal += 1;
+            stats.lines_equal += 1;
         }
         // otherwise, assume lines are not equal
         else
@@ -81,20 +85,15 @@ pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
             // log line number and text from file(s)
             println!("Warning: The following lines do not match!");
             println!("{}: {}: {}",
-                file_str, processed_lines + 1, str_1_buf.trim()
+                file_str, stats.processed_lines + 1, str_1_buf.trim()
             );
             println!("{}: {}: {}\n",
-                cmp_file_str, processed_lines + 1, str_2_buf.trim()
+                cmp_file_str, stats.processed_lines + 1, str_2_buf.trim()
             );
         }
 
-        processed_lines += 1;
+        stats.processed_lines += 1;
     }
-
-    println!("{} lines processed", processed_lines);
-    println!("{} out of {} lines were equivalent.\n",
-        lines_equal, processed_lines
-    );
 
     Ok(())
 }
