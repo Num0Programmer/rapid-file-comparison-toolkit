@@ -8,8 +8,34 @@ pub const ARG_ONE_SEL: usize = 1;
 pub const ARG_TWO_SEL: usize = 2;
 
 
+/// structure to store statistics about the comparison
+pub struct ComparisonStats
+{
+    /// tracks number of lines which were equal between all files given
+    pub total_lines_equal: u32,
+    /// tracks number of lines which were processed between all files given
+    pub total_lines_processed: u32
+}
+
+impl ComparisonStats
+{
+    pub fn new() -> Self
+    {
+        Self
+        {
+            total_lines_equal: 0,
+            total_lines_processed: 0
+        }
+    }
+}
+
+
 /// compares contents of a directory to a single file
-pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
+pub fn dir_file_cmp(
+    stats: &mut ComparisonStats,
+    dir: &String,
+    cmp_file_str: &String
+) -> std::io::Result<()>
 {
     for entry in fs::read_dir(dir)?
     {
@@ -19,7 +45,8 @@ pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
             .into_string()
             .unwrap();
 
-        file_cmp(&file_str, cmp_file_str)?;
+        println!("Comparing {} to {}...\n", file_str, cmp_file_str);
+        file_cmp(stats, &file_str, cmp_file_str)?;
     }
 
     Ok(())
@@ -27,7 +54,11 @@ pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
 
 
 /// compares two files at given file paths
-pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
+pub fn file_cmp(
+    stats: &mut ComparisonStats,
+    file_str: &String,
+    cmp_file_str: &String
+) -> std::io::Result<()>
 {
     // try to open first file
     let file_1 = File::open(&file_str)?;
@@ -35,9 +66,10 @@ pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
     // try to open second file
     let file_2 = File::open(&cmp_file_str)?;
 
-    // initialize comparison information
+    // tracks number of lines equal between these two files
     let mut lines_equal = 0;
-    let mut processed_lines = 0;
+    // tracks number of lines processed in these two files
+    let mut lines_processed = 0;
 
     // create BufReaders for files
     let mut file_1_buf = BufReader::new(file_1);
@@ -60,20 +92,18 @@ pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
             // log line number and text from file(s)
             println!("Warning: The following lines do not match!");
             println!("{}: {}: {}",
-                file_str, processed_lines + 1, str_1_buf.trim()
+                file_str, lines_processed + 1, str_1_buf.trim()
             );
             println!("{}: {}: {}\n",
-                cmp_file_str, processed_lines + 1, str_2_buf.trim()
+                cmp_file_str, lines_processed + 1, str_2_buf.trim()
             );
         }
 
-        processed_lines += 1;
+        lines_processed += 1;
     }
 
-    println!("{} lines processed", processed_lines);
-    println!("{} out of {} lines were equivalent.",
-        lines_equal, processed_lines
-    );
+    stats.total_lines_equal += lines_equal;
+    stats.total_lines_processed += lines_processed;
 
     Ok(())
 }
