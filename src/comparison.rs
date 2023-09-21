@@ -45,7 +45,7 @@ pub fn dir_file_cmp(
             .into_string()
             .unwrap();
 
-        println!("Comparing {} to {}...", file_str, cmp_file_str);
+        println!("Comparing {} to {}...\n", file_str, cmp_file_str);
         file_cmp(stats, &file_str, cmp_file_str)?;
     }
 
