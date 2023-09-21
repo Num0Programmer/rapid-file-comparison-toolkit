@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{self, File, DirEntry};
 use std::io::BufReader;
 use std::io::prelude::*;
 
@@ -8,7 +8,26 @@ pub const FILE_ONE_SEL: usize = 1;
 pub const FILE_TWO_SEL: usize = 2;
 
 
-/// compares two files at given file paths - can be relative or absolute
+/// compares contents of a directory to a single file
+pub fn dir_file_cmp(dir: &String, file_str: &String) -> std::io::Result<()>
+{
+    // try to open directory
+    //let dir = fs::read_dir(&dir)?;
+
+    // try to open file
+    //let file = File::open(&file_str)?;
+
+    for entry in fs::read_dir(".")?
+    {
+        let dir = entry?;
+        println!("{:?}", dir.path());
+    }
+
+    Ok(())
+}
+
+
+/// compares two files at given file paths
 pub fn file_cmp(file_1_str: &String, file_2_str: &String) -> std::io::Result<()>
 {
     // try to open first file
