@@ -32,9 +32,9 @@ fn main() -> std::io::Result<()>
         _ => { file_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?; }
     }
 
-    println!("{} lines processed", stats.processed_lines);
+    println!("{} lines processed", stats.total_lines_processed);
     println!("{} out of {} lines were equivalent.",
-        stats.lines_equal, stats.processed_lines
+        stats.total_lines_equal, stats.total_lines_processed
     );
 
     Ok(())

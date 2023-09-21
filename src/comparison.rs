@@ -11,8 +11,10 @@ pub const ARG_TWO_SEL: usize = 2;
 /// structure to store statistics about the comparison
 pub struct ComparisonStats
 {
-    pub lines_equal: u32,
-    pub processed_lines: u32
+    /// tracks number of lines which were equal between all files given
+    pub total_lines_equal: u32,
+    /// tracks number of lines which were processed between all files given
+    pub total_lines_processed: u32
 }
 
 impl ComparisonStats
@@ -21,8 +23,8 @@ impl ComparisonStats
     {
         Self
         {
-            lines_equal: 0,
-            processed_lines: 0
+            total_lines_equal: 0,
+            total_lines_processed: 0
         }
     }
 }
@@ -64,6 +66,11 @@ pub fn file_cmp(
     // try to open second file
     let file_2 = File::open(&cmp_file_str)?;
 
+    // tracks number of lines equal between these two files
+    let mut lines_equal = 0;
+    // tracks number of lines processed in these two files
+    let mut lines_processed = 0;
+
     // create BufReaders for files
     let mut file_1_buf = BufReader::new(file_1);
     let mut file_2_buf = BufReader::new(file_2);
@@ -77,7 +84,7 @@ pub fn file_cmp(
         // check line bufs eq
         if str_1_buf.eq(&str_2_buf)
         {
-            stats.lines_equal += 1;
+            lines_equal += 1;
         }
         // otherwise, assume lines are not equal
         else
@@ -85,15 +92,18 @@ pub fn file_cmp(
             // log line number and text from file(s)
             println!("Warning: The following lines do not match!");
             println!("{}: {}: {}",
-                file_str, stats.processed_lines + 1, str_1_buf.trim()
+                file_str, lines_processed + 1, str_1_buf.trim()
             );
             println!("{}: {}: {}\n",
-                cmp_file_str, stats.processed_lines + 1, str_2_buf.trim()
+                cmp_file_str, lines_processed + 1, str_2_buf.trim()
             );
         }
 
-        stats.processed_lines += 1;
+        lines_processed += 1;
     }
+
+    stats.total_lines_equal += lines_equal;
+    stats.total_lines_processed += lines_processed;
 
     Ok(())
 }
