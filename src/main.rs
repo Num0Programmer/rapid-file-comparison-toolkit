@@ -1,7 +1,7 @@
 use std::env;
 use std::fs;
 
-use rapid_file_comparison_toolkit::comparison::*;
+use rfctk::comparison::*;
 
 fn main() -> std::io::Result<()>
 {
