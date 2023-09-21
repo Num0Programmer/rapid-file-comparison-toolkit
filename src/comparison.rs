@@ -8,6 +8,26 @@ pub const ARG_ONE_SEL: usize = 1;
 pub const ARG_TWO_SEL: usize = 2;
 
 
+/// structure to store statistics about the comparison
+pub struct ComparisonStats
+{
+    lines_equal: u32,
+    processed_lines: u32
+}
+
+impl ComparisonStats
+{
+    pub fn new() -> Self
+    {
+        Self
+        {
+            lines_equal: 0,
+            processed_lines: 0
+        }
+    }
+}
+
+
 /// compares contents of a directory to a single file
 pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
 {
@@ -19,6 +39,7 @@ pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
             .into_string()
             .unwrap();
 
+        println!("Comparing {} to {}...", file_str, cmp_file_str);
         file_cmp(&file_str, cmp_file_str)?;
     }
 
@@ -71,7 +92,7 @@ pub fn file_cmp(file_str: &String, cmp_file_str: &String) -> std::io::Result<()>
     }
 
     println!("{} lines processed", processed_lines);
-    println!("{} out of {} lines were equivalent.",
+    println!("{} out of {} lines were equivalent.\n",
         lines_equal, processed_lines
     );
 
