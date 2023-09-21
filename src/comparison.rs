@@ -13,6 +13,7 @@ pub fn dir_file_cmp(dir: &String, cmp_file_str: &String) -> std::io::Result<()>
 {
     for entry in fs::read_dir(dir)?
     {
+        // convert path buffer into file path
         let file_str = entry?.path()
             .into_os_string()
             .into_string()
