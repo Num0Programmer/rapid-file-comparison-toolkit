@@ -17,7 +17,7 @@ pub fn dir_file_cmp(dir: &String, file_str: &String) -> std::io::Result<()>
     // try to open file
     //let file = File::open(&file_str)?;
 
-    for entry in fs::read_dir(".")?
+    for entry in fs::read_dir(dir)?
     {
         let dir = entry?;
         println!("{:?}", dir.path());
