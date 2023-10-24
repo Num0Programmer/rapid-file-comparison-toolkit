@@ -19,6 +19,7 @@ pub struct ComparisonStats
 
 impl ComparisonStats
 {
+    /// initializes a new comparison statistics structure
     pub fn new() -> Self
     {
         Self
