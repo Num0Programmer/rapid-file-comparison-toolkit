@@ -46,7 +46,6 @@ pub fn dir_file_cmp(
             .into_string()
             .unwrap();
 
-        println!("Comparing {} to {}...\n", file_str, cmp_file_str);
         file_cmp(stats, &file_str, cmp_file_str)?;
     }
 
@@ -78,6 +77,7 @@ pub fn file_cmp(
     let mut str_1_buf = String::new();
     let mut str_2_buf = String::new();
 
+    println!("Comparing {} to {}...\n", file_str, cmp_file_str);
     // read another line from both buffers until EOF for either file
     while file_1_buf.read_line(&mut str_1_buf)? > 0
         && file_2_buf.read_line(&mut str_2_buf)? > 0
@@ -100,6 +100,8 @@ pub fn file_cmp(
             );
         }
 
+        str_1_buf.clear();
+        str_2_buf.clear();
         lines_processed += 1;
     }
 
