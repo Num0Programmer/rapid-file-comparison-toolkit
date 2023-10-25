@@ -18,18 +18,24 @@ fn main() -> std::io::Result<()>
     match key_tup
     {
         // check for directory to directory comparison
-        (true, true) => {
+        (true, true) =>
+        {
             println!("Directory to directory comparison is not supported yet!");
         },
         // check for directory to file comparison
-        (true, false) => {
+        (true, false) =>
+        {
             dir_file_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?;
         },
-        (false, true) => {
+        (false, true) =>
+        {
             dir_file_cmp(&mut stats, &env_args[ARG_TWO_SEL], &env_args[ARG_ONE_SEL])?;
         },
         // assume file to file comparison
-        _ => { file_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?; }
+        _ =>
+        {
+            file_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?;
+        }
     }
 
     println!("{} lines processed", stats.total_lines_processed);
