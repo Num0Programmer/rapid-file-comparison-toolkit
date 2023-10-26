@@ -1,7 +1,7 @@
 use std::env;
 use std::fs;
 
-use rfctk::comparison::*;
+use rfctk::*;
 
 fn main() -> std::io::Result<()>
 {
