@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()>
             // check for directory to directory comparison
             (true, true) =>
             {
-                println!("Directory to directory comparison is not supported yet!");
+                dir_dir_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?;
             },
             // check for directory to file comparison
             (true, false) =>
@@ -64,5 +64,4 @@ fn help()
     println!("usage: rfc <file> <other_file>");
     println!("           <file> <dir>");
     println!("           <dir>  <other_dir>\n");
-    println!(" - Directory to directory comparison is currently not implemented!");
 }

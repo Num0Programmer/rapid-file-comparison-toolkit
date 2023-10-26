@@ -31,14 +31,37 @@ impl ComparisonStats
 }
 
 
+/// compares contents of two directories
+pub fn dir_dir_cmp(
+    stats: &mut ComparisonStats,
+    dir_str: &String,
+    cmp_dir_str: &String
+) -> std::io::Result<()>
+{
+    for entry in fs::read_dir(dir_str)?
+    {
+        // convert path buffer into file path for file *n* in first dir
+        let file_str = entry?.path()
+            .into_os_string()
+            .into_string()
+            .unwrap();
+
+        // comparison file *n* to contents of other dir
+        dir_file_cmp(stats, &cmp_dir_str, &file_str)?;
+    }
+
+    Ok(())
+}
+
+
 /// compares contents of a directory to a single file
 pub fn dir_file_cmp(
     stats: &mut ComparisonStats,
-    dir: &String,
+    dir_str: &String,
     cmp_file_str: &String
 ) -> std::io::Result<()>
 {
-    for entry in fs::read_dir(dir)?
+    for entry in fs::read_dir(dir_str)?
     {
         // convert path buffer into file path
         let file_str = entry?.path()
