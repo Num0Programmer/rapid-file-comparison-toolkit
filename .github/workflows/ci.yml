@@ -1,0 +1,22 @@
+name: CI
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: main
+
+      - name: install
+        working-directory: ${{ github.workspace }}/main
+        shell: bash -l {0}
+        run: cargo install --path .
+
+      - name: test
+        working-directory: ${{ github.workspace }}/main
+        shell: bash -l {0}
+        run: make test
