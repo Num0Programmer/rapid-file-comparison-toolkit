@@ -61,7 +61,8 @@ fn main() -> std::io::Result<()>
 fn help()
 {
     // present general usage information
-    println!("usage: rfc <file_1> <file_2>");
-    println!("           <file_1> <dir>");
-    println!("           <dir_1>  <dir_2>");
+    println!("usage: rfc <file> <other_file>");
+    println!("           <file> <dir>");
+    println!("           <dir>  <other_dir>\n");
+    println!(" - Directory to directory comparison is currently not implemented!");
 }
