@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()>
             // check for directory to directory comparison
             (true, true) =>
             {
-                dir_dir_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?;
+                dir_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?;
             },
             // check for directory to file comparison
             (true, false) =>
