@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()>
             // check for directory to directory comparison
             (true, true) =>
             {
-                println!("Directory to directory comparison is not supported yet!");
+                dir_cmp(&mut stats, &env_args[ARG_ONE_SEL], &env_args[ARG_TWO_SEL])?;
             },
             // check for directory to file comparison
             (true, false) =>
@@ -52,6 +52,11 @@ fn main() -> std::io::Result<()>
         println!("{} out of {} lines were equivalent.",
             stats.total_lines_equal, stats.total_lines_processed
         );
+        // check that directories has entries with matching names
+        if stats.total_shared_files > 0
+        {
+            println!("The directories shared {} entries.", stats.total_shared_files);
+        }
     }
 
     Ok(())
@@ -64,5 +69,4 @@ fn help()
     println!("usage: rfc <file> <other_file>");
     println!("           <file> <dir>");
     println!("           <dir>  <other_dir>\n");
-    println!(" - Directory to directory comparison is currently not implemented!");
 }
