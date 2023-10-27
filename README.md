@@ -5,8 +5,16 @@ A library of functionality used to compare files written in Rust.
 ```sh
 git clone git@github.com:Num0Programmer/rfctk.git
 cd rfctk
-cargo install --path .
+make install
 ```
+
+
+## Test installation
+
+```sh
+make test
+```
+
 
 ## Use RFCTk
 
