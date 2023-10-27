@@ -52,6 +52,7 @@ fn main() -> std::io::Result<()>
         println!("{} out of {} lines were equivalent.",
             stats.total_lines_equal, stats.total_lines_processed
         );
+        println!("The directories shared {} files.", stats.total_shared_files);
     }
 
     Ok(())
