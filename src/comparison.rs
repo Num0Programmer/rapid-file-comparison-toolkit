@@ -1,4 +1,4 @@
-use ansi_term::{Colour::Yellow, Style};
+use ansi_term::Colour::Yellow;
 use std::fs::{self, File};
 use std::io::BufReader;
 use std::io::prelude::*;
