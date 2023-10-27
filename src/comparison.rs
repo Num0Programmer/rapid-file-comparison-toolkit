@@ -1,3 +1,4 @@
+use ansi_term::{Colour::Yellow, Style};
 use std::fs::{self, File};
 use std::io::BufReader;
 use std::io::prelude::*;
@@ -137,7 +138,11 @@ pub fn file_cmp(
         else
         {
             // log line number and text from file(s)
-            println!("Warning: The following lines do not match!");
+            println!(
+                "{}",
+                Yellow.bold()
+                    .paint("Warning: The following lines do not match!")
+            );
             println!("{}: {}: {}",
                 file_str, lines_processed + 1, str_1_buf.trim()
             );
