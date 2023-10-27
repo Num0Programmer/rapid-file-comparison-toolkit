@@ -16,7 +16,7 @@ pub struct ComparisonStats
     /// tracks the number of lines which were processed between all files given
     pub total_lines_processed: u32,
     /// tracks the number of files which were shared by two directories
-    pub total_shared_files: u32  // TODO: useful to know?
+    pub total_shared_files: u32
 }
 
 impl ComparisonStats
