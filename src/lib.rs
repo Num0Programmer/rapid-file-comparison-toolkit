@@ -16,8 +16,8 @@ mod test
         // instantiate comparison stats
         let mut stats = ComparisonStats::new();
         // initialize strings for testing
-        let test_file_str = String::from("tests/data/test_file.txt");
-        let other_test_file_str = String::from("tests/data/other_test_file.txt");
+        let test_file_str = String::from("tests/files/test_file.txt");
+        let other_test_file_str = String::from("tests/files/other_test_file.txt");
 
         file_cmp(&mut stats, &test_file_str, &other_test_file_str)?;
 
@@ -34,8 +34,8 @@ mod test
         // instantiate comparison stats
         let mut stats = ComparisonStats::new();
         // initialize strings for testing
-        let test_file_str = String::from("tests/data/test_file.txt");
-        let small_test_file_str = String::from("tests/data/small_test_file.txt");
+        let test_file_str = String::from("tests/files/test_file.txt");
+        let small_test_file_str = String::from("tests/files/small_test_file.txt");
 
         file_cmp(&mut stats, &test_file_str, &small_test_file_str)?;
 
@@ -52,8 +52,8 @@ mod test
         // instantiate comparison stats
         let mut stats = ComparisonStats::new();
         // initialize strings for testing
-        let test_dir_str = String::from("tests/data/test_directory");
-        let other_test_dir_str = String::from("tests/data/other_test_directory");
+        let test_dir_str = String::from("tests/directories/test_directory");
+        let other_test_dir_str = String::from("tests/directories/other_test_directory");
 
         dir_cmp(&mut stats, &test_dir_str, &other_test_dir_str)?;
 
