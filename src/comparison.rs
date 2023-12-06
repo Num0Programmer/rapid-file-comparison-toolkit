@@ -149,6 +149,9 @@ pub fn file_cmp(
             println!("{}: {}: {}\n",
                 cmp_file_str, lines_processed + 1, str_2_buf.trim()
             );
+
+            // assume rest of file 2 matches file 1
+            let _ = file_2_buf.read_line(&mut str_2_buf);
         }
 
         str_1_buf.clear();
