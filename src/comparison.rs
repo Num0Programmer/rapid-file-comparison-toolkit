@@ -109,14 +109,25 @@ pub fn file_cmp(
 {
     // try to open first file
     let file_1 = File::open(&file_str)?;
+    let file_1_len = file_1.metadata()?.len();
+    let mut file_1_line = 1;
 
     // try to open second file
     let file_2 = File::open(&cmp_file_str)?;
+    let file_2_len = file_2.metadata()?.len();
+    let mut file_2_line = 1;
 
     // tracks number of lines equal between these two files
     let mut lines_equal = 0;
     // tracks number of lines processed in these two files
     let mut lines_processed = 0;
+    // tracks the longer file of the two - assumes equivalence
+    let longer_file = match (file_1_len > file_2_len, file_2_len > file_1_len)
+    {
+        (true, false) => 1,
+        (false, true) => 2,
+        _ => 0
+    };
 
     // create BufReaders for files
     let mut file_1_buf = BufReader::new(file_1);
@@ -144,16 +155,32 @@ pub fn file_cmp(
                     .paint("Warning: The following lines do not match!")
             );
             println!("{}: {}: {}",
-                file_str, lines_processed + 1, str_1_buf.trim()
+                file_str, file_1_line, str_1_buf.trim()
             );
             println!("{}: {}: {}\n",
-                cmp_file_str, lines_processed + 1, str_2_buf.trim()
+                cmp_file_str, file_2_line, str_2_buf.trim()
             );
 
             // assume rest of file 2 matches file 1
-            let _ = file_2_buf.read_line(&mut str_2_buf);
+            if longer_file == 1
+                && file_1_buf.read_line(&mut str_1_buf)? > 0
+            {
+                file_1_line += 1;
+            }
+            else if longer_file == 2
+                && file_2_buf.read_line(&mut str_2_buf)? > 0
+            {
+                file_2_line += 1;
+            }
+
+            str_1_buf.clear();
+            str_2_buf.clear();
+            lines_processed += 1;
+            continue;
         }
 
+        file_1_line += 1;
+        file_2_line += 1;
         str_1_buf.clear();
         str_2_buf.clear();
         lines_processed += 1;
